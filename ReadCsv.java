@@ -4,7 +4,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 
-public class WordCount {
+public class ReadCsv {
 	public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
 		public void map(LongWritable key, Text value, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException {
 			String[] splittedValues = value.toString().split("\\s+");
@@ -33,8 +33,8 @@ public class WordCount {
 	}
 
 	public static void main(String[] args) throws Exception {
-		JobConf conf = new JobConf(WordCount.class);
-		conf.setJobName("wordcount");
+		JobConf conf = new JobConf(ReadCsv.class);
+		conf.setJobName("ReadCsv");
 		conf.setOutputKeyClass(Text.class);
 		conf.setOutputValueClass(IntWritable.class);
 		conf.setMapperClass(Map.class);
@@ -42,10 +42,8 @@ public class WordCount {
 		conf.setReducerClass(Reduce.class);
 		conf.setInputFormat(TextInputFormat.class);
 		conf.setOutputFormat(TextOutputFormat.class);
-//		FileInputFormat.setInputPaths(conf, new Path(args[0]));
-//		FileOutputFormat.setOutputPath(conf, new Path(args[1]));
-		FileInputFormat.setInputPaths(conf, new Path("/home/cloudera/data_sample.txt"));
-		FileOutputFormat.setOutputPath(conf, new Path("/home/cloudera/data_sample_out"));
+		FileInputFormat.setInputPaths(conf, new Path(args[0]));
+		FileOutputFormat.setOutputPath(conf, new Path(args[1]));
 		JobClient.runJob(conf);
 	}
 }
